@@ -1,0 +1,47 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>  
+<div class="pagination"><%= will_paginate models %></div>
+  <table class="table table-striped">
+  	<%=t('Project')%>=<%=@project.name if @project %>
+    <tr>
+      <th><%= t('Create Date') %></th>
+      <th><%= t('Name') %></th>
+      <th><%= t('Description') %></th>
+      <th><%= t('Ranking Index') %></th>
+      <th><%= t('Entered By') %></th>
+      <th></th>
+    </tr>
+
+    <% models.each do |r| %>
+        <tr>
+          <td><%= (r.created_at + 8.hours).strftime("%Y/%m/%d")%></td>
+          <td><%= link_to r.name, SUBURI + "/view_handler?index=1&url=#{misc_definition_path(r)}" %></td>
+          <td><%= r.desp %></td>
+          <td><%= r.ranking_index %></td>
+          <td><%= r.last_updated_by.name if r.last_updated_by_id.present? %></td>
+          <td><%= link_to t('Edit'), edit_misc_definition_path(r, :subaction => @definition_category, definition_category: @definition_category, :format => :js), 
+                  :remote => true, :class => BUTTONS_CLS['action'] if has_action_right?('update_' + @definition_category, params[:controller], r) %></td>
+        </tr>
+    <% end %>
+
+  </table>
+
+	<table class="table table-striped">
+	  <tr>
+	    <th>
+	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
+	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= link_to t("New " + @definition_category.titleize), new_misc_definition_path(:definition_category => @definition_category.strip, :subaction => @definition_category.strip, :project_id => @project.id, :format => :js), :remote => true, 
+               :id => 'new_log_link', :class => BUTTONS_CLS['action'] if has_action_right?('create_' + @definition_category, params[:controller]) %> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= link_to t("New " + @definition_category.titleize), new_misc_definition_path(:definition_category => @definition_category.strip, :project_id => @project.id, :format => :js), :remote => true, 
+               :id => 'new_log_link', :class => BUTTONS_CLS['action'] if has_action_right?('create', params[:controller]) %>   
+		</th>
+	  </tr>
+	</table>
+
+</div>
+ 
+ <% end %> 

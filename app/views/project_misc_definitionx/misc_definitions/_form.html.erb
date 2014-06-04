@@ -1,0 +1,16 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+<% else %> 
+<%= simple_form_for @misc_definition do |f| %>     
+  <%= f.input :project_name, :label => t('Project Name'), :readonly => true, :input_html => {:value => @project.name} %>
+  <%= f.input :name, :label => t('Name'), :readonly => readonly?(@misc_definition, 'name') %>
+  <%= f.input :desp, :label => t("Description "), :input_html => {:rows => 2}, :readonly => readonly?(@misc_definition, 'desp') %> 
+  <%= f.input :ranking_index, :label => t('Ranking Index'), :placehoder => '1, 2, 3 ...', :readonly => readonly?(@misc_definition, 'ranking_index') %> 
+  
+  <%= link_to t('Back'), CGI.escape(misc_definitions_path(:definition_category => @definition_category, :project_id => @project.id)), :class => BUTTONS_CLS['action'] %>
+  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
+<% end %> 
+
+<% end %>
+

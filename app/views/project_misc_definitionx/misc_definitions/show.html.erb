@@ -1,0 +1,43 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>
+<div id="main_body">
+<h4><%=@title %></h4>
+
+<p>
+  <b><%= t('Create Date') %></b>
+  <%= @misc_definition.created_at.strftime("%Y/%m/%d") %>
+</p>
+<p>
+  <b><%= t('Project Name') %></b>
+  <%= @misc_definition.project.name %>
+</p>
+<p>
+  <b><%= t('Name') %></b>
+  <%= @misc_definition.name %>
+</p>
+<p>
+  <b><%= t('Description') %></b>
+  <%= @misc_definition.desp %>
+</p>
+<p>
+  <b><%= t('Ranking Index')  %></b>
+  <%= @misc_definition.ranking_index %>
+</p>
+<p>
+  <b><%= t('Last Updated By') %></b>
+  <%= @misc_definition.last_updated_by.name %>
+</p>
+   <table class="table table-striped">
+	  <tr>
+	    <th>
+  	  	  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
+  	  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  		  <%= link_to t('Delete'), misc_definition_path(@misc_definition), :method => :delete, :confirm => I18n.t('Delete the record?'), :class => BUTTONS_CLS['action'] if has_action_right?('destroy_' + @definition_category, params[:controller], @misc_definition) %>
+        </th>
+	  </tr>
+	</table>    	
+</div>
+
+<% end %>

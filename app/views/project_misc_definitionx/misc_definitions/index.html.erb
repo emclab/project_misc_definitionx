@@ -1,0 +1,8 @@
+<div id="main_body">
+	<h4><%=@title + '-' + t(@definition_category.sub('_', ' ').pluralize.titleize) if @definition_cateogry.present? %></h4>
+    <h4><%=@title if @definition_cateogry.blank? %></h4>
+ 
+	<%= render partial: 'form_list', locals: {models: @misc_definitions} %>
+ 
+</div>
+
