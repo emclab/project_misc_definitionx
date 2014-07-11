@@ -23,6 +23,8 @@
           <td><%= r.last_updated_by.name if r.last_updated_by_id.present? %></td>
           <td><%= link_to t('Edit'), edit_misc_definition_path(r, :subaction => @definition_category, definition_category: @definition_category, :format => :js), 
                   :remote => true, :class => BUTTONS_CLS['action'] if has_action_right?('update_' + @definition_category, params[:controller], r) %></td>
+          <td><%= link_to t('Edit'), edit_misc_definition_path(r, definition_category: @definition_category, :format => :js), 
+                  :remote => true, :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
         </tr>
     <% end %>
 

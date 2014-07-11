@@ -76,9 +76,11 @@ module ProjectMiscDefinitionx
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition)
+        qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'category')
         get 'create' , {:use_route => :project_misc_definitionx,  :misc_definition => qs}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        #response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        redirect_to misc_definitions_path(:project_id => @proj.id, :definition_category => 'category', :subaction => session[:subaction] ) #, 
+                                                               #:notice => I18n.t("Successfully Saved!") 
       end
       
       it "should render 'new' if data error" do
@@ -113,9 +115,10 @@ module ProjectMiscDefinitionx
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        qs = FactoryGirl.create(:project_misc_definitionx_misc_definition)
+        qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'category')
         get 'update' , {:use_route => :project_misc_definitionx,  :id => qs.id, :misc_definition => {:name => 'newnew'}}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        #response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        redirect_to misc_definitions_path(:project_id => @proj.id, :definition_category => 'category', :subaction => session[:subaction] )
       end
       
       it "should render 'new' if data error" do
