@@ -17,7 +17,7 @@
     <% models.each do |r| %>
         <tr>
           <td><%= (r.created_at + 8.hours).strftime("%Y/%m/%d")%></td>
-          <td><%= link_to r.name, SUBURI + "/view_handler?index=1&url=#{misc_definition_path(r)}" %></td>
+          <td><%= link_to r.name, SUBURI + "/view_handler?index=1&url=#{misc_definition_path(r, subaction: @definition_category)}" %></td>
           <td><%= r.desp %></td>
           <td><%= r.ranking_index %></td>
           <td><%= r.last_updated_by.name if r.last_updated_by_id.present? %></td>

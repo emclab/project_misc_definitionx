@@ -40,7 +40,9 @@ describe "LinkTests" do
         :sql_code => "")
       user_access = FactoryGirl.create(:user_access, :action => 'update_' + @definition_category, :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
-      user_access = FactoryGirl.create(:user_access, :action => 'show_' + @definition_category, :resource =>'project_misc_definitionx_misc_definitions', :masked_attrs => '-start_date, -expire_date', :role_definition_id => @role.id, :rank => 1,
+      user_access = FactoryGirl.create(:user_access, :action => 'show_' + @definition_category, :resource =>'project_misc_definitionx_misc_definitions', :masked_attrs => '', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "record.last_updated_by_id == session[:user_id]")
+      user_access = FactoryGirl.create(:user_access, :action => 'destroy_' + @definition_category, :resource =>'project_misc_definitionx_misc_definitions', :masked_attrs => '', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "record.last_updated_by_id == session[:user_id]")
       user_access = FactoryGirl.create(:user_access, :action => 'create_public_Misc Definition', :resource => 'commonx_logs', :role_definition_id => @role.id, :rank => 1,
       :sql_code => "")
@@ -61,9 +63,10 @@ describe "LinkTests" do
       click_link 'Edit'
       page.should have_content('Update Misc Definition')
       save_and_open_page
-      fill_in 'misc_definition_name', :with => 'a test bom'
-      click_button 'Save'
+      #fill_in 'misc_definition_name', :with => 'a test bom'
+      #click_button 'Save'
       #with bad data
+=begin  #need to enable js to test
       visit misc_definitions_path
       #save_and_open_page
       page.should have_content('Misc Definitions')
@@ -71,15 +74,16 @@ describe "LinkTests" do
       fill_in 'misc_definition_ranking_index', :with => ''
       click_button 'Save'
       save_and_open_page
-      
-      visit misc_definitions_path
-      click_link qs1.id.to_s
+=end      
+      visit misc_definitions_path(:project_id => @proj.id, :definition_category => @definition_category, :subaction => @definition_category )
       save_and_open_page
+      click_link qs1.name
       page.should have_content('Misc Definition Info')
             
-      visit new_misc_definition_path(:definition_category => @definition_category, :project_id => @proj.id)
+      visit new_misc_definition_path(:definition_category => @definition_category, :project_id => @proj.id, :subaction => @definition_category)
       save_and_open_page
       page.should have_content('New Misc Definition')
+=begin
       fill_in 'misc_definition_subject', :with => 'a test bom'
       fill_in 'misc_definition_content', :with => 'a test spec'
       fill_in 'misc_definition_start_date', :with => Date.today
@@ -92,7 +96,7 @@ describe "LinkTests" do
       fill_in 'misc_definition_start_date', :with => Date.today
       click_button 'Save'
       #save_and_open_page
-      
+=end      
     end
   end
 end

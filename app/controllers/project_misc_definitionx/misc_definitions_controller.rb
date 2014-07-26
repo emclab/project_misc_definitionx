@@ -11,13 +11,13 @@ module ProjectMiscDefinitionx
       @misc_definitions = @misc_definitions.where(definition_category: @definition_category) if @definition_category
       @misc_definitions = @misc_definitions.where(project_id: @project.id) if @project
       @misc_definitions = @misc_definitions.page(params[:page]).per_page(@max_pagination)
-      @erb_code = find_config_const('misc_definition_index_view', 'project_misc_definitionx')
+      @erb_code = find_config_const('misc_definition_index_view_' + @definition_category, 'project_misc_definitionx')
     end
   
     def new
       @title = t('New Misc Definition')
       @misc_definition = ProjectMiscDefinitionx::MiscDefinition.new()
-      @erb_code = find_config_const('misc_definition_new_view', 'project_misc_definitionx')
+      @erb_code = find_config_const('misc_definition_new_view_' + @definition_category, 'project_misc_definitionx')
     end
   
     def create
@@ -29,7 +29,7 @@ module ProjectMiscDefinitionx
                                                                :notice => t("Successfully Saved!") 
       else
         @project = ProjectMiscDefinitionx.project_class.find_by_id(params[:misc_definition][:project_id]) if params[:misc_definition][:project_id].present?
-        @erb_code = find_config_const('misc_definition_new_view', 'project_misc_definitionx')
+        @erb_code = find_config_const('misc_definition_new_view_' + @definition_category, 'project_misc_definitionx')
         flash[:notice] = t('Data Error. Not Saved!')
         render 'new'
       end
@@ -38,7 +38,7 @@ module ProjectMiscDefinitionx
     def edit
       @title = t('Update Misc Definition')
       @misc_definition = ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id])
-      @erb_code = find_config_const('misc_definition_edit_view', 'project_misc_definitionx')
+      @erb_code = find_config_const('misc_definition_edit_view_' + @definition_category, 'project_misc_definitionx')
     end
   
     def update
@@ -49,7 +49,7 @@ module ProjectMiscDefinitionx
         redirect_to misc_definitions_path(:project_id => @misc_definition.project_id, :definition_category => @misc_definition.definition_category, :subaction => session[:subaction] ), 
                                                                :notice => t("Successfully Updated!") 
       else
-        @erb_code = find_config_const('misc_definition_edit_view', 'project_misc_definitionx')
+        @erb_code = find_config_const('misc_definition_edit_view_' + @definition_category, 'project_misc_definitionx')
         flash[:notice] = t('Data Error. Not Updated!')
         render 'edit'
       end
@@ -58,7 +58,7 @@ module ProjectMiscDefinitionx
     def show
       @title = t('Misc Definition Info')
       @misc_definition = ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id])
-      @erb_code = find_config_const('misc_definition_show_view', 'project_misc_definitionx')
+      @erb_code = find_config_const('misc_definition_show_view_' + @definition_category, 'project_misc_definitionx')
     end
   
     def destroy
@@ -69,6 +69,7 @@ module ProjectMiscDefinitionx
     protected
     def load_record
       @definition_category = params[:definition_category].strip if params[:definition_category].present?
+      @definition_category = ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id].to_i).definition_category.strip if params[:id].present?
       @project = ProjectMiscDefinitionx.project_class.find_by_id(params[:project_id]) if params[:project_id].present?
       @project = ProjectMiscDefinitionx.project_class.find_by_id(ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id]).project_id) if params[:id].present?
     end

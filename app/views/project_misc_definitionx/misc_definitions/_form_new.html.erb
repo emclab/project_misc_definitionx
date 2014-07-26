@@ -10,7 +10,8 @@
   <%= f.input :definition_category, :input_html => {:value => @definition_category}, :as => :hidden %>
   <%= f.input :ranking_index, :label => t('Ranking Index'), :placehoder => '1, 2, 3 ...'%> 
   
-  <%= link_to t('Back'), CGI.escape(misc_definitions_path(:definition_category => @definition_category, :subaction => @definition_category, :project_id => @project.id)), :class => BUTTONS_CLS['action'] %>
+  <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :subaction => @definition_category, :project_id => @project.id), :class => BUTTONS_CLS['action'] if has_action_right?('index_'+ @definition_category, params[:controller]) %>
+  <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :project_id => @project.id), :class => BUTTONS_CLS['action'] if has_action_right?('index', params[:controller]) %>
   <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
 <% end %> 
 

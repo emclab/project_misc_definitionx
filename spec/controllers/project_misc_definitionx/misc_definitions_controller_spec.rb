@@ -89,7 +89,7 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition, :name => nil)
-        get 'create' , {:use_route => :project_misc_definitionx,  :misc_definition => qs}
+        get 'create' , {:use_route => :project_misc_definitionx,  :misc_definition => qs, :definition_category => 'test'}
         response.should render_template("new")
       end
     end
