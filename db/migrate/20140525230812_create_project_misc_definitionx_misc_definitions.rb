@@ -8,7 +8,7 @@ class CreateProjectMiscDefinitionxMiscDefinitions < ActiveRecord::Migration
       t.string :definition_category
       t.integer :last_updated_by_id
       t.timestamps
-      t.boolean :show_to_customer
+      
     end
     
     add_index :project_misc_definitionx_misc_definitions, :project_id
