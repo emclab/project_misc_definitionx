@@ -7,6 +7,7 @@
   <%= f.input :name, :label => t('Name'), :readonly => readonly?(@misc_definition, 'name') %>
   <%= f.input :desp, :label => t("Description "), :input_html => {:rows => 2}, :readonly => readonly?(@misc_definition, 'desp') %> 
   <%= f.input :ranking_index, :label => t('Ranking Index'), :placehoder => '1, 2, 3 ...', :readonly => readonly?(@misc_definition, 'ranking_index') %> 
+  <%= f.input :show_to_customer, :label => t('Show to Customer'), :as => :boolean %>
   
   <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :subaction => @definition_category, :project_id => @project.id), :class => BUTTONS_CLS['action'] if has_action_right?('index_'+ @definition_category, params[:controller]) %>
   <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :project_id => @project.id), :class => BUTTONS_CLS['action'] if has_action_right?('index', params[:controller]) %>

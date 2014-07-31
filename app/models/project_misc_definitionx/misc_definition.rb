@@ -1,9 +1,10 @@
 module ProjectMiscDefinitionx
   class MiscDefinition < ActiveRecord::Base
-    attr_accessor :project_name
-    attr_accessible :definition_category, :desp, :name, :project_id, :ranking_index, :definition_category, :project_name,
+    attr_accessor :project_name, :show_to_customer_noupdate
+    attr_accessible :definition_category, :desp, :name, :project_id, :ranking_index, :definition_category, :project_name, :show_to_customer,
                     :as => :role_new
-    attr_accessible :definition_category, :desp, :name, :ranking_index, :definition_category, :project_name,
+    attr_accessible :definition_category, :desp, :name, :ranking_index, :definition_category, :project_name, :show_to_customer,
+                    :show_to_customer_noupdate,
                     :as => :role_update
     
     belongs_to :last_updated_by, :class_name => 'Authentify::User'
