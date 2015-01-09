@@ -34,7 +34,7 @@
 	    <th>
   	  	  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
   	  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  		  <%= link_to t('Delete'), misc_definition_path(@misc_definition), :method => :delete, :confirm => 'Delete the record?', :class => BUTTONS_CLS['action'] if has_action_right?('destroy_' + @definition_category, params[:controller], @misc_definition) %>
+  		  <%= link_to t('Delete'), misc_definition_path(@misc_definition, subaction: @misc_definition.definition_category), :method => :delete, :confirm => 'Delete the record?', :class => BUTTONS_CLS['action'] if has_action_right?('destroy_' + @misc_definition.definition_category, params[:controller], @misc_definition) %>
         </th>
 	  </tr>
 	</table>    	
