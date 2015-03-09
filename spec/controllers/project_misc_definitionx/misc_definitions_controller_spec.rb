@@ -1,10 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module ProjectMiscDefinitionx
-  describe MiscDefinitionsController do
+  RSpec.describe MiscDefinitionsController, type: :controller do
+    routes {ProjectMiscDefinitionx::Engine.routes}
     before(:each) do
-      controller.should_receive(:require_signin)
-      controller.should_receive(:require_employee)
+      expect(controller).to receive(:require_signin)
+      expect(controller).to receive(:require_employee)
     end
     before(:each) do
       @pagination_config = FactoryGirl.create(:engine_config, :engine_name => nil, :engine_version => nil, :argument_name => 'pagination', :argument_value => 30)
@@ -24,35 +25,35 @@ module ProjectMiscDefinitionx
     describe "GET 'index'" do
       it "returns all misc definitions for regular user" do
         user_access = FactoryGirl.create(:user_access, :action => 'index_role_definition', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "ProjectMiscDefinitionx::MiscDefinition.scoped.order('ranking_index')")     
+        :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")     
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'role_definition')
         qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => qs.project_id, :name => 'new')
-        get 'index' , {:use_route => :project_misc_definitionx, :project_id => @proj.id, :subaction => 'role_definition', :definition_category => 'role_definition'}
-        assigns(:misc_definitions).should =~ [qs]       
+        get 'index' , {:project_id => @proj.id, :subaction => 'role_definition', :definition_category => 'role_definition'}
+        expect(assigns(:misc_definitions)).to match_array([qs])      
       end
       
       it "should return for a category" do
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "ProjectMiscDefinitionx::MiscDefinition.scoped.order('ranking_index')")        
+        :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :definition_category => 'new category')
         qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :project_id => qs.project_id + 1 )
-        get 'index' , {:use_route => :project_misc_definitionx, :definition_category => qs.definition_category}
-        assigns(:misc_definitions).should eq([qs])
+        get 'index' , {:definition_category => qs.definition_category}
+        expect(assigns(:misc_definitions)).to match_array([qs])
       end
       
       it "should returns all definition for a project" do
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "ProjectMiscDefinitionx::MiscDefinition.scoped.order('ranking_index')")    
+        :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")    
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :name => 'new new')
         qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :project_id => qs.project_id)
-        get 'index' , {:use_route => :project_misc_definitionx, :project_id => qs1.project_id, :definition_category => qs1.definition_category}
-        assigns(:misc_definitions).should =~ [qs1, qs]     
+        get 'index' , {:project_id => qs1.project_id, :definition_category => qs1.definition_category}
+        expect(assigns(:misc_definitions)).to match_array([qs1, qs])     
       end
       
     end
@@ -64,8 +65,8 @@ module ProjectMiscDefinitionx
         :sql_code => "")        
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        get 'new' , {:use_route => :project_misc_definitionx, :project_id => @proj.id, :definition_category => 'some_cate'}
-        response.should be_success
+        get 'new' , {:project_id => @proj.id, :definition_category => 'some_cate'}
+        expect(response).to be_success
       end
            
     end
@@ -77,8 +78,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'category')
-        get 'create' , {:use_route => :project_misc_definitionx,  :misc_definition => qs}
-        #response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        get 'create' , { :misc_definition => qs}
+        #expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
         redirect_to misc_definitions_path(:project_id => @proj.id, :definition_category => 'category', :subaction => session[:subaction] ) #, 
                                                                #:notice => I18n.t("Successfully Saved!") 
       end
@@ -89,8 +90,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition, :name => nil)
-        get 'create' , {:use_route => :project_misc_definitionx,  :misc_definition => qs, :definition_category => 'test'}
-        response.should render_template("new")
+        get 'create' , { :misc_definition => qs, :definition_category => 'test'}
+        expect(response).to render_template("new")
       end
     end
   
@@ -102,8 +103,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition)
-        get 'edit' , {:use_route => :project_misc_definitionx,  :id => qs.id}
-        response.should be_success
+        get 'edit' , { :id => qs.id}
+        expect(response).to be_success
       end
       
     end
@@ -116,8 +117,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'category')
-        get 'update' , {:use_route => :project_misc_definitionx,  :id => qs.id, :misc_definition => {:name => 'newnew'}}
-        #response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        get 'update' , { :id => qs.id, :misc_definition => {:name => 'newnew'}}
+        #expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
         redirect_to misc_definitions_path(:project_id => @proj.id, :definition_category => 'category', :subaction => session[:subaction] )
       end
       
@@ -127,8 +128,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition)
-        get 'update' , {:use_route => :project_misc_definitionx,  :id => qs.id, :misc_definition => {:ranking_index => 0}}
-        response.should render_template("edit")
+        get 'update' , { :id => qs.id, :misc_definition => {:ranking_index => 0}}
+        expect(response).to render_template("edit")
       end
     end
   
@@ -140,8 +141,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :last_updated_by_id => @u.id)
-        get 'show' , {:use_route => :project_misc_definitionx,  :id => qs.id, :definition_category => qs.definition_category }
-        response.should be_success
+        get 'show' , { :id => qs.id, :definition_category => qs.definition_category }
+        expect(response).to be_success
       end
     end
   
@@ -152,8 +153,8 @@ module ProjectMiscDefinitionx
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:project_misc_definitionx_misc_definition)
-        get 'destroy', {:use_route => :project_misc_definitionx, :id => q.id }
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+        get 'destroy', {:id => q.id }
+        expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
       end
     end
   

@@ -2,8 +2,10 @@ require_dependency "project_misc_definitionx/application_controller"
 
 module ProjectMiscDefinitionx
   class MiscDefinitionsController < ApplicationController
-    before_filter :require_employee
-    before_filter :load_record
+    before_action :require_employee
+    before_action :load_record
+    protect_from_forgery except: :edit  #for ajax new_log
+    
     
     def index
       @title = t('Misc Definitions')
