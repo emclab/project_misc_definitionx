@@ -17,6 +17,11 @@ module ProjectMiscDefinitionx
       c.should_not be_valid
     end
     
+    it "should take ranking_index" do
+      c = FactoryGirl.build(:project_misc_definitionx_misc_definition, :ranking_index => nil)
+      c.should be_valid
+    end
+    
     it "should reject nil definition category" do
       c = FactoryGirl.build(:project_misc_definitionx_misc_definition, :definition_category => nil)
       c.should_not be_valid
