@@ -12,6 +12,7 @@ module ProjectMiscDefinitionx
     validates :project_id, :ranking_index, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
     validates :name, :presence => true,
                      :uniqueness => {:scope => :project_id, :case_sensitive => false, :message => I18n.t('Duplicate Name!')} 
+    validates :ranking_index, :numericality => {:only_integer => true, :greater_than => 0}, :if => 'ranking_index.present?'
     validates :definition_category, :presence => true   
     validate :dynamic_validate
       
