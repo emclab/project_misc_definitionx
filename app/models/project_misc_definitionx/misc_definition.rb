@@ -9,7 +9,7 @@ module ProjectMiscDefinitionx
     belongs_to :last_updated_by, :class_name => 'Authentify::User'
     belongs_to :project, :class_name => ProjectMiscDefinitionx.project_class.to_s
     
-    validates :project_id, :ranking_index, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
+    validates :project_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
     validates :name, :presence => true,
                      :uniqueness => {:scope => :project_id, :case_sensitive => false, :message => I18n.t('Duplicate Name!')} 
     validates :definition_category, :presence => true  
