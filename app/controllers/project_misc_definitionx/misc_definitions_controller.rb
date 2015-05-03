@@ -24,7 +24,7 @@ module ProjectMiscDefinitionx
     end
   
     def create
-      @misc_definition = ProjectMiscDefinitionx::MiscDefinition.new(params[:misc_definition], :as => :role_new)
+      @misc_definition = ProjectMiscDefinitionx::MiscDefinition.new(new_params)
       @misc_definition.last_updated_by_id = session[:user_id]
       if @misc_definition.save
         #redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
@@ -47,7 +47,7 @@ module ProjectMiscDefinitionx
     def update
       @misc_definition = ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id])
       @misc_definition.last_updated_by_id = session[:user_id]
-      if @misc_definition.update_attributes(params[:misc_definition], :as => :role_update)
+      if @misc_definition.update_attributes(edit_params)
         #redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
         redirect_to misc_definitions_path(:project_id => @misc_definition.project_id, :definition_category => @misc_definition.definition_category, :subaction => session[:subaction] ), 
                                                                :notice => t("Successfully Updated!") 
@@ -77,7 +77,15 @@ module ProjectMiscDefinitionx
       @project = ProjectMiscDefinitionx.project_class.find_by_id(ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id]).project_id) if params[:id].present?
     end
     
-  
+    private
+    
+    def new_params
+      params.require(:misc_definition).permit(:definition_category, :desp, :name, :project_id, :ranking_index, :definition_category)
+    end
+    
+    def new_params
+      params.require(:misc_definition).permit(:definition_category, :desp, :name, :ranking_index, :definition_category)
+    end
     
   end
 end

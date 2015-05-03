@@ -18,6 +18,8 @@ module ProjectMiscDefinitionx
       @u = FactoryGirl.create(:user, :user_levels => [ul], :user_roles => [ur])
 
       @proj = FactoryGirl.create(:info_service_projectx_project)
+      
+      session[:user_role_ids] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id).user_role_ids
     end
       
     render_views
@@ -27,7 +29,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'index_role_definition', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")     
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'role_definition')
         qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => qs.project_id, :name => 'new')
         get 'index' , {:project_id => @proj.id, :subaction => 'role_definition', :definition_category => 'role_definition'}
@@ -38,7 +39,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :definition_category => 'new category')
         qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :project_id => qs.project_id + 1 )
         get 'index' , {:definition_category => qs.definition_category}
@@ -49,7 +49,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")    
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :name => 'new new')
         qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :project_id => qs.project_id)
         get 'index' , {:project_id => qs1.project_id, :definition_category => qs1.definition_category}
@@ -64,7 +63,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         get 'new' , {:project_id => @proj.id, :definition_category => 'some_cate'}
         expect(response).to be_success
       end
@@ -76,7 +74,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'category')
         get 'create' , { :misc_definition => qs}
         #expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
@@ -88,7 +85,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.attributes_for(:project_misc_definitionx_misc_definition, :name => nil)
         get 'create' , { :misc_definition => qs, :definition_category => 'test'}
         expect(response).to render_template("new")
@@ -101,7 +97,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition)
         get 'edit' , { :id => qs.id}
         expect(response).to be_success
@@ -115,7 +110,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :definition_category => 'category')
         get 'update' , { :id => qs.id, :misc_definition => {:name => 'newnew'}}
         #expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
@@ -126,7 +120,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition)
         get 'update' , { :id => qs.id, :misc_definition => {:ranking_index => 0}}
         expect(response).to render_template("edit")
@@ -139,7 +132,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'show', :resource => 'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")        
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qs = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => @proj.id, :last_updated_by_id => @u.id)
         get 'show' , { :id => qs.id, :definition_category => qs.definition_category }
         expect(response).to be_success
@@ -151,7 +143,6 @@ module ProjectMiscDefinitionx
         user_access = FactoryGirl.create(:user_access, :action => 'destroy', :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:project_misc_definitionx_misc_definition)
         get 'destroy', {:id => q.id }
         expect(response).to redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
