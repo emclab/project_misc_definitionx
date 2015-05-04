@@ -83,9 +83,9 @@ module ProjectMiscDefinitionx
       params.require(:misc_definition).permit(:definition_category, :desp, :name, :project_id, :ranking_index, :definition_category)
     end
     
-    def new_params
+    def edit_params
       params.require(:misc_definition).permit(:definition_category, :desp, :name, :ranking_index, :definition_category)
     end
-    
+ 
   end
 end
