@@ -3,6 +3,8 @@
   
 <% else %>  
 <div class="pagination"><%= will_paginate models %></div>
+    <h4><%=@title + '-' + t(@definition_category.sub('_', ' ').pluralize.titleize) if @definition_cateogry.present? %></h4>
+    <h4><%=@title if @definition_cateogry.blank? %></h4>
   <table class="table table-striped">
   	<%=t('Project')%>=<%=@project.name if @project %>
     <tr>
