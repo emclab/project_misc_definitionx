@@ -4,7 +4,7 @@ module ProjectMiscDefinitionx
   RSpec.describe MiscDefinitionsController, type: :controller do
     routes {ProjectMiscDefinitionx::Engine.routes}
     before(:each) do
-      expect(controller).to receive(:require_signin)
+      #expect(controller).to receive(:require_signin)
       expect(controller).to receive(:require_employee)
     end
     before(:each) do
