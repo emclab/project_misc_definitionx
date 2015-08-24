@@ -37,5 +37,11 @@ module ProjectMiscDefinitionx
       c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 1)
       expect(c1).not_to be_valid
     end
+    
+    it "should be OK if for different category" do
+      c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => 1)
+      c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 1, :definition_category => 'a new one')
+      expect(c1).to be_valid
+    end
   end
 end
