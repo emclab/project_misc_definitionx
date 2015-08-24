@@ -32,10 +32,16 @@ module ProjectMiscDefinitionx
       c.should_not be_valid
     end
     
-    it "should have unique batch#" do
+    it "should have unique name" do
       c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => 1)
       c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 1)
       c1.should_not be_valid
+    end
+    
+    it "should be OK with different category" do
+      c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => 1)
+      c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 1, :definition_category => 'a new category')
+      c1.should be_valid
     end
   end
 end
