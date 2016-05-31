@@ -20,6 +20,31 @@ module ProjectMiscDefinitionx
     def dynamic_validate
       wf = Authentify::AuthentifyUtility.find_config_const('dynamic_validate_' + definition_category, 'project_misc_definitionx') if definition_category
       eval(wf) if wf.present?
-    end                     
+    end   
+    
+    #role convert to csv
+    def self.role_to_csv(project_id, definition_category = 'role_definition', start_index=1, token = 'token')
+      CSV.generate do |csv|
+        #header = ['id', 'name', 'brief_note', 'last_updated_by_id', 'manager_role_id', 'created_at', 'updated_at', 'flag', 'fort_token', 'ranking_index']        
+        all.each.with_index(start_index) do |config, i|
+          #assembly array for the row
+          base = ProjectMiscDefinitionx::MiscDefinition.where('project_id = ? AND definition_category = ?', project_id, definition_category)
+          row = Array.new
+          row << i
+          row << base.name
+          row << base.brief_note
+          row << base.last_updated_by_id
+          row << base.manger_role_id
+          row << base.created_at
+          row << base.updated_at
+          row << base.flag
+          row << token 
+          row << base.ranking_index
+          #inject to csv
+          csv << row
+       
+        end
+      end
+    end                  
   end
 end

@@ -12,9 +12,17 @@ module ProjectMiscDefinitionx
       @misc_definitions = params[:project_misc_definitionx_misc_definitions][:model_ar_r]
       @misc_definitions = @misc_definitions.where(definition_category: @definition_category) if @definition_category
       @misc_definitions = @misc_definitions.where(project_id: @project.id) if @project
-      @misc_definitions = @misc_definitions.page(params[:page]).per_page(@max_pagination)
+      #@misc_definitions = @misc_definitions.page(params[:page]).per_page(@max_pagination)
       @erb_code = find_config_const('misc_definition_index_view', 'project_misc_definitionx')
       #@erb_code = find_config_const('misc_definition_index_view_' + @definition_category, 'project_misc_definitionx')
+      
+      #for csv download
+      respond_to do |format|
+        format.html {@misc_definitions = @misc_definitions.page(params[:page]).per_page(@max_pagination) }
+        format.csv do
+          send_data @misc_definitions.role_to_csv(@project.id, 'role_definition', params[:index_from].to_i, params[:token?]) if params[:csv_for] == 'role_definition'
+        end
+      end
     end
   
     def new
