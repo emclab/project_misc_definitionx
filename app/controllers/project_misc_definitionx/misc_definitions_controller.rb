@@ -20,7 +20,7 @@ module ProjectMiscDefinitionx
       respond_to do |format|
         format.html {@misc_definitions = @misc_definitions.page(params[:page]).per_page(@max_pagination) }
         format.csv do
-          send_data @misc_definitions.role_to_csv(@project.id, 'role_definition', params[:index_from].to_i, params[:token?]) if params[:csv_for] == 'role_definition'
+          send_data @misc_definitions.role_to_csv(@project.id, 'role_definition', params[:index_from].to_i, params[:token?]) #if @definition_category == 'role_definition'
         end
       end
     end
