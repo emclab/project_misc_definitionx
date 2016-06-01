@@ -1,3 +1,3 @@
 module ProjectMiscDefinitionx
-  VERSION = "02"
+  VERSION = "03"
 end
