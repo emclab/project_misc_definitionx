@@ -1,5 +1,5 @@
 <% if @view_in_config && @erb_code %>
-  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  <%= render inline: @erb_code, locals: {models: models} %>
   
 <% else %>  
 <div class="pagination"><%= will_paginate models %></div>
