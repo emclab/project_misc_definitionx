@@ -7,16 +7,19 @@
     <h4><%=@title if @definition_cateogry.blank? %></h4>
   <table class="table table-striped">
   	<p><%=t('Project')%>=<%=@project.name if @project %></p>
-  	<p><%= form_tag misc_definitions_path(format: "csv", :project_id => @project.id, csv_for: 'role_definition'), method: :get do %>
-     <div class="form-inputs">
-	   <%= label_tag(:index_from, "Index From") %>
-       <%= text_field_tag('index_from', '1', size: 6) %>
-       <%= label_tag(:token, "Token ") %>
-       <%= text_field_tag('token?', '', size: 12) %>
-  
-	   <%= submit_tag 'CSV' %>
-	 </div>
-  <% end if @project && @definition_category == 'role_definition' %></p>
+    <p><%= form_tag misc_definitions_path(format: "csv"), method: :get do %>
+           <div class="form-inputs">
+	          <%= label_tag(:index_from, "Index From") %>
+              <%= text_field_tag('index_from', '1', size: 6) %>
+              <%= label_tag(:token, "Token ") %>
+              <%= text_field_tag('token?', '', size: 12) %>
+              <%= hidden_field_tag('project_id', @project.id) %>
+              <%= hidden_field_tag 'definition_category', @definition_category %>
+              <%= hidden_field_tag 'subaction', @definition_category %>
+                           
+	         <%= submit_tag 'CSV' %>
+	       </div>
+      <% end if @project && (@definition_category == 'role_definition' || @definition_category == 'position_definition') %></p>
     <tr>
       <th><%= t('Create Date') %></th>
       <th><%= t('Name') %></th>
