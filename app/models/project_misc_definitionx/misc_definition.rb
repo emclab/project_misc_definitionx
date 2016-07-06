@@ -38,6 +38,7 @@ module ProjectMiscDefinitionx
           row << base.updated_at
           row << '' #base.flag
           row << token 
+          row << base.ranking_index
           #inject to csv
           csv << row
        
