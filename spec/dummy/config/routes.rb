@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   mount ProjectMiscDefinitionx::Engine => "/project_misc_definitionx"
   mount Authentify::Engine => "/authentify"
   mount Commonx::Engine => "/commonx"
-  mount InfoServiceProjectx::Engine => '/project'
+  #mount InfoServiceProjectx::Engine => '/project'
   mount Kustomerx::Engine => '/customer'
   mount Searchx::Engine => '/search'
   

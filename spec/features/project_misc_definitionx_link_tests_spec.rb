@@ -31,12 +31,15 @@ RSpec.describe "LinkTests" , type: :request do
       ul = FactoryGirl.build(:user_level, :sys_user_group_id => ug.id)
       @u = FactoryGirl.create(:user, :user_levels => [ul], :user_roles => [ur])
       
-      @proj = FactoryGirl.create(:info_service_projectx_project)
+      #@proj = FactoryGirl.create(:info_service_projectx_project)
+      @proj = FactoryGirl.create(:commonx_misc_definition)
       @definition_category = 'role_definition'
       user_access = FactoryGirl.create(:user_access, :action => 'index_' + @definition_category, :resource => 'project_misc_definitionx_misc_definitions', :masked_attrs => '-expire_date', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "ProjectMiscDefinitionx::MiscDefinition.all.order('ranking_index')")     
         
       user_access = FactoryGirl.create(:user_access, :action => 'create_' + @definition_category, :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "")
+      user_access = FactoryGirl.create(:user_access, :action => 'create' , :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
       user_access = FactoryGirl.create(:user_access, :action => 'update_' + @definition_category, :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
@@ -55,18 +58,20 @@ RSpec.describe "LinkTests" , type: :request do
     end
     it "works! (now write some real specs)" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :project_id => @proj.id, :definition_category => @definition_category)
+      qs1 = FactoryGirl.create(:project_misc_definitionx_misc_definition, :last_updated_by_id => @u.id, :resource_id => @proj.id, :resource_string => 'commonx/misc_definitions', :definition_category => @definition_category)
         
-      visit project_misc_definitionx.misc_definitions_path(:project_id => @proj.id, :definition_category => @definition_category, :subaction => @definition_category )
-      save_and_open_page
+      visit project_misc_definitionx.misc_definitions_path(:resource_id => @proj.id, :resource_string => 'commonx/misc_definitions', :definition_category => @definition_category, :subaction => @definition_category )
       expect(page).to have_content('Misc Definitions')
       click_link 'Edit'
       expect(page).to have_content('Update Misc Definition')
-      save_and_open_page
-      #fill_in 'misc_definition_name', :with => 'a test bom'
-      #click_button 'Save'
-      #with bad data
 =begin  #need to enable js to test
+      save_and_open_page
+      fill_in 'misc_definition_name', :with => 'a test bom'
+      click_button 'Save'
+      visit project_misc_definitionx.misc_definitions_path(:resource_id => @proj.id, :resource_string => 'commonx/misc_definitions', :definition_category => @definition_category, :subaction => @definition_category )
+      expect(page).to have_content('a test bom')
+      #with bad data
+
       visit project_misc_definitionx.misc_definitions_path
       #save_and_open_page
       expect(page).to have_content('Misc Definitions')
@@ -75,13 +80,14 @@ RSpec.describe "LinkTests" , type: :request do
       click_button 'Save'
       save_and_open_page
 =end      
-      visit project_misc_definitionx.misc_definitions_path(:project_id => @proj.id, :definition_category => @definition_category, :subaction => @definition_category )
-      save_and_open_page
+      visit project_misc_definitionx.misc_definitions_path(:resource_id => @proj.id, :resource_string => 'commonx/misc_definitions', :definition_category => @definition_category, :subaction => @definition_category )
+      #save_and_open_page
       click_link qs1.name
-      expect(page).to have_content('Misc Definition Info')
+      #save_and_open_page
+      #expect(page).to have_content('Misc Definition Info')
             
-      visit project_misc_definitionx.new_misc_definition_path(:definition_category => @definition_category, :project_id => @proj.id, :subaction => @definition_category)
-      save_and_open_page
+      visit project_misc_definitionx.new_misc_definition_path(:definition_category => @definition_category, :resource_id => @proj.id, :resource_string => 'commonx/misc_definitions', :subaction => @definition_category)
+      #save_and_open_page
       expect(page).to have_content('New Misc Definition')
 =begin
       fill_in 'misc_definition_subject', :with => 'a test bom'

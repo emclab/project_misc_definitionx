@@ -1,4 +1,4 @@
-<% if @view_in_config && @erb_code %>
+<% if  @erb_code %>
   <%= render inline: @erb_code, locals: {models: models} %>
   
 <% else %>  
@@ -6,14 +6,12 @@
     <h4><%=@title + '-' + t(@definition_category.sub('_', ' ').pluralize.titleize) if @definition_cateogry.present? %></h4>
     <h4><%=@title if @definition_cateogry.blank? %></h4>
   <table class="table table-striped">
-  	<p><%=t('Project')%>=<%=@project.name if @project %></p>
-    <p><%= form_tag misc_definitions_path(format: "csv"), method: :get do %>
+  	<p><%= form_tag misc_definitions_path(format: "csv"), method: :get do %>
            <div class="form-inputs">
 	          <%= label_tag(:index_from, "Index From") %>
               <%= text_field_tag('index_from', '1', size: 6) %>
               <%= label_tag(:token, "Token ") %>
               <%= text_field_tag('token?', '', size: 12) %>
-              <%= hidden_field_tag('project_id', @project.id) %>
               <%= hidden_field_tag 'definition_category', @definition_category %>
               <%= hidden_field_tag 'subaction', @definition_category %>
                            
@@ -25,8 +23,7 @@
       <th><%= t('Name') %></th>
       <th><%= t('Description') %></th>
       <th><%= t('Ranking Index') %></th>
-      <th><%= t('Ranking Index') %></th>
-      <th><%= t('Entered By') %></th>
+      <th><%= t('Last Updated By') %></th>
       <th></th>
     </tr>
 
@@ -51,10 +48,10 @@
 	    <th>
 	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
 	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<%= link_to t("New " + @definition_category.titleize), new_misc_definition_path(:definition_category => @definition_category.strip, :subaction => @definition_category.strip, :project_id => @project.id, :format => :js), :remote => true, 
+			<%= link_to t("New " + @definition_category.titleize), new_misc_definition_path(:definition_category => @definition_category.strip, :subaction => @definition_category.strip, :resource_id => params[:resource_id], :resource_string => params[:resource_string], :format => :js), :remote => true, 
                :id => 'new_log_link', :class => BUTTONS_CLS['action'] if has_action_right?('create_' + @definition_category, params[:controller]) %> 
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<%= link_to t("New " + @definition_category.titleize), new_misc_definition_path(:definition_category => @definition_category.strip, :project_id => @project.id, :format => :js), :remote => true, 
+			<%= link_to t("New " + @definition_category.titleize), new_misc_definition_path(:definition_category => @definition_category.strip, :resource_id => params[:resource_id], :resource_string => params[:resource_string], :format => :js), :remote => true, 
                :id => 'new_log_link', :class => BUTTONS_CLS['action'] if has_action_right?('create', params[:controller]) %>   
 		</th>
 	  </tr>

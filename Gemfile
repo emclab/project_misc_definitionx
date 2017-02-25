@@ -15,7 +15,7 @@ gem 'coffee-script-source', '1.8.0'
 
 gem 'authentify', :path => '../authentify'  #for rspec test
 gem 'commonx', :path => '../commonx'
-gem 'info_service_projectx', :path => '../info_service_projectx'
+gem 'ext_construction_projectx', :path => '../ext_construction_projectx'
 gem 'kustomerx', :path => '../kustomerx'
 gem 'searchx', :path => '../searchx'
 

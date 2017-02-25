@@ -1,18 +1,16 @@
-<% if @view_in_config && @erb_code %>
+<% if  @erb_code %>
   <%= render inline: @erb_code %>
   
 <% else %>
 <h4><%=@title %></h4>
 <%= simple_form_for(@misc_definition) do |f| %> 
-  <%= f.input :project_name, :label => t('Project Name'), :readonly => true, :input_html => {:value => @project.name} %>
-  <%= f.input :project_id, :as => :hidden, :input_html => {:value => @project.id} %> 
   <%= f.input :name, :label => t('Name') %>
   <%= f.input :desp, :label => t("Description"), :input_html => {:rows => 2} %> 
   <%= f.input :definition_category, :input_html => {:value => @definition_category}, :as => :hidden %>
   <%= f.input :ranking_index, :label => t('Ranking Index'), :placehoder => '1, 2, 3 ...'%> 
   
-  <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :subaction => @definition_category, :project_id => @project.id), :class => BUTTONS_CLS['action'] if has_action_right?('index_'+ @definition_category, params[:controller]) %>
-  <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :project_id => @project.id), :class => BUTTONS_CLS['action'] if has_action_right?('index', params[:controller]) %>
+  <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :subaction => @definition_category, :resource_id => @misc_definition.resource_id, :resource_string => @misc_definition.resource_string), :class => BUTTONS_CLS['action'] if has_action_right?('index_'+ @definition_category, params[:controller]) %>
+  <%= link_to t('Back'), misc_definitions_path(:definition_category => @definition_category, :resource_id => @misc_definition.resource_id, :resource_string => @misc_definition.resource_string), :class => BUTTONS_CLS['action'] if has_action_right?('index', params[:controller]) %>
   <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
 <% end %> 
 

@@ -7,8 +7,8 @@ module ProjectMiscDefinitionx
       expect(c).to be_valid
     end
     
-    it "should reject 0 project_id" do
-      c = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 0)
+    it "should reject 0 resource_id" do
+      c = FactoryGirl.build(:project_misc_definitionx_misc_definition, :resource_id => 0)
       expect(c).not_to be_valid
     end
     
@@ -33,14 +33,14 @@ module ProjectMiscDefinitionx
     end
     
     it "should have unique batch#" do
-      c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => 1)
-      c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 1)
+      c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :resource_id => 1)
+      c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :resource_id => 1)
       expect(c1).not_to be_valid
     end
     
     it "should be OK if for different category" do
-      c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :project_id => 1)
-      c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :project_id => 1, :definition_category => 'a new one')
+      c = FactoryGirl.create(:project_misc_definitionx_misc_definition, :resource_id => 1, :resource_string => 'my_string')
+      c1 = FactoryGirl.build(:project_misc_definitionx_misc_definition, :resource_id => 1, :resource_string => 'my_string', :definition_category => 'a new one')
       expect(c1).to be_valid
     end
   end

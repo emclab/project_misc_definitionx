@@ -20,6 +20,7 @@ class CreateInfoServiceProjectxProjects < ActiveRecord::Migration
       t.date :fully_online_date
 
       t.timestamps
+      t.string :fort_token
     end
     
     add_index :info_service_projectx_projects, :customer_id

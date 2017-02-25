@@ -1,4 +1,4 @@
-<% if @view_in_config && @erb_code %>
+<% if  @erb_code %>
   <%= render inline: ERB.new(@erb_code).result(binding) %>
   
 <% else %>
@@ -7,10 +7,6 @@
 <p>
   <b><%= t('Create Date') %></b>
   <%= @misc_definition.created_at.strftime("%Y/%m/%d") %>
-</p>
-<p>
-  <b><%= t('Project Name') %></b>
-  <%= @misc_definition.project.name %>
 </p>
 <p>
   <b><%= t('Name') %></b>
@@ -31,7 +27,7 @@
    <table class="table table-striped">
 	  <tr>
 	    <th>
-  	  	  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
+  	  	  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
   	  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   		  <%= link_to t('Delete'), misc_definition_path(@misc_definition, subaction: @misc_definition.definition_category), :method => :delete, :confirm => 'Delete the record?', :class => BUTTONS_CLS['action'] if has_action_right?('destroy_' + @misc_definition.definition_category, params[:controller], @misc_definition) %>
         </th>
