@@ -82,8 +82,10 @@ module ProjectMiscDefinitionx
     end
   
     def destroy
+      md = ProjectMiscDefinitionx::MiscDefinition.find_by_id(params[:id].to_i)
       ProjectMiscDefinitionx::MiscDefinition.delete(params[:id].to_i)
-      redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Deleted!")
+      redirect_to misc_definitions_path(:resource_id => md.resource_id, :resource_string => md.resource_string, :definition_category => md.definition_category, :subaction => md.definition_category ), 
+                                                               :notice => t("Successfully Deleted!") 
     end
     
     protected

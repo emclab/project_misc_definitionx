@@ -150,12 +150,14 @@ module ProjectMiscDefinitionx
   
     describe "GET 'destroy'" do
       it "returns http success" do
-        user_access = FactoryGirl.create(:user_access, :action => 'destroy', :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
+        user_access = FactoryGirl.create(:user_access, :action => 'destroy_order_status',  :resource =>'project_misc_definitionx_misc_definitions', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        q = FactoryGirl.create(:project_misc_definitionx_misc_definition)
-        get 'destroy', {:id => q.id }
-        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Deleted!")
+        session[:subaction] = 'order_status'
+        q = FactoryGirl.create(:project_misc_definitionx_misc_definition, definition_category: 'order_status')
+        get 'destroy', {:id => q.id, subaction: 'order_status' }
+        expect(response).to redirect_to misc_definitions_path(:resource_id => q.resource_id, :resource_string => q.resource_string, :definition_category => q.definition_category, :subaction => session[:subaction] ), 
+                                                               :notice => I18n.t("Successfully Deleted!") 
       end
     end
   
