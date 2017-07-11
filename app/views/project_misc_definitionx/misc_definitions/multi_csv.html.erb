@@ -1,0 +1,47 @@
+<% if @erb_code %>
+<%= render inline: @erb_code %>
+<% else %>
+<div class="container-fluid">
+<p>Export Multiple <%=@definition_category.titlelize%> CSV</p>
+ <%= form_tag multi_csv_result_misc_definitions_path(format: 'csv', definition_category: @defintion_category), :method => :get do %>
+ <table class="table table-hover">
+	<thead>
+  <tr>
+  	 <th></th>
+     <th><%= t('Project Name') %></th>
+     <th><%= t('Release') %></th>
+     <th><%= t('Package#') %></th>
+     <th><%= t('Create At') %></th>
+     <th><%= t('Project Desp') %></th>
+  </tr>
+    </thead>
+    <tbody>
+	<% i = 0 %>
+<% @from_projects.each do |r| %>
+    <tr>
+  	<% releases = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'release', r.id).order('id DESC')%>
+  	<% pkg = ProjectMiscDefinitionx::MiscDefinition.where('definition_category = ? AND project_id = ?', 'package_code', r.id)%>
+  	<% if releases.present? && pkg.present? %>
+      <td><%= check_box_tag 'ids[]', i.to_s + ',' + r.id.to_s   %></td>
+      <td><%= r.name %></td>
+      <td><%= select_tag('release_ver[]', options_for_select(releases.select('id, name').map{|r| [r.name, r.id]})) %></td>
+      <td><%= text_field_tag 'pkg_code[]', pkg.first.name if pkg.present? %></td>
+      <td><%= r.created_at.strftime('%Y/%m/%d') %></td>
+      <td><%= r.project_desp[0..60] if r.project_desp %></td>
+	  <% i += 1 %>
+    <% end %>
+  </tr>
+<% end %>
+  </tbody>
+    </table>
+		
+	<div class="btn-toolbar">
+   
+  		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  		  <%= submit_tag t('Save') ,:name => "save", :class => BUTTONS_CLS['action'] %>
+  	 
+    </div>
+ <% end %>
+
+</div>
+<% end %>

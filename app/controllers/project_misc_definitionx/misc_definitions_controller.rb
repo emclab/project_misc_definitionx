@@ -20,8 +20,8 @@ module ProjectMiscDefinitionx
       respond_to do |format|
         format.html {@misc_definitions = @misc_definitions.page(params[:page]).per_page(@max_pagination) }
         format.csv do
-          send_data @misc_definitions.role_to_csv(@project.id, 'role_definition', params[:index_from].to_i, params[:token?]) if @definition_category == 'role_definition'
-          send_data @misc_definitions.position_to_csv(@project.id, 'position_definition', params[:index_from].to_i, params[:token?]) if @definition_category == 'position_definition'
+          send_data @misc_definitions.to_csv(@project.id, @definition_category, params[:index_from].to_i, params[:token?]) #if @definition_category == 'role_definition'
+          #send_data @misc_definitions.position_to_csv(@project.id, 'position_definition', params[:index_from].to_i, params[:token?]) if @definition_category == 'position_definition'
         end
       end
     end
@@ -76,6 +76,20 @@ module ProjectMiscDefinitionx
     def destroy
       ProjectMiscDefinitionx::MiscDefinition.delete(params[:id].to_i)
       redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
+    end
+    
+    def multi_csv
+      @from_projects = ProojectMiscDefinitionx.project_class.where('cancelled = ? AND decommissioned = ?', false, false).order('id DESC')
+      @erb_code = find_config_const('misc_definition_multi_csv_view', params[:controller].sub(/\/.+/, ''))
+    end
+    
+    def multi_csv_result
+      @misc_definitions = ProjectMiscDefinitionx::MiscDefinition.where('definition_category = ?', @definition_category).all
+      respond_to do |format|
+        format.csv do
+          send_data @misc_definitions.m_to_csv(params[:ids], params[:release_ver], params[:pkg_code])
+        end 
+      end
     end
     
     protected
